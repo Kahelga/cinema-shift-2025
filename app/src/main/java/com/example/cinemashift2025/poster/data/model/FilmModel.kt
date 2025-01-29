@@ -5,16 +5,15 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FilmModel(
-    //Надо ли делать @SerialName, если названия совпадают?
     val id: String,
     val name:String,
-    val originalNam:String,
+    val originalName:String,
     val description:String,
     val releaseDate :String,
     val actors:List<FilmActorModel>,
     val directors:List<FilmDirectorModel>,
-    val runtime: Int,
-    val ageRatings: AgeRatings,
+    val runtime: Long,
+    val ageRating: AgeRatings,
     val genres:List<String>,
     val userRatings: FilmUserRatingModel,
     val img:String,
