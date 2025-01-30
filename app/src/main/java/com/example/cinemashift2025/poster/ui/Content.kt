@@ -173,14 +173,14 @@ private fun FilmItem(
                     // контур иконки
                     Icon(
                         imageVector = Icons.Default.Star,
-                        contentDescription = "Рейтинг контуром",
+                        contentDescription = null,
                         tint = Color.Black,
                         modifier = Modifier.size(30.dp)
                     )
 
                     Icon(
                         imageVector = Icons.Default.Star,
-                        contentDescription = "Рейтинг",
+                        contentDescription = null,
                         tint = Color.Yellow,
                         modifier = Modifier.size(28.dp)
                     )

@@ -44,7 +44,7 @@ fun PosterScreen(
                 .padding(vertical = 12.dp, horizontal = 8.dp),
 
             text = stringResource(id = R.string.poster_title),
-            style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold),
+            style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Bold),
         )
 
         when (val state = posterState) {
