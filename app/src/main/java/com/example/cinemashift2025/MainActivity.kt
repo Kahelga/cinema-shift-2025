@@ -11,6 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.cinemashift2025.detailes.data.converter.DetailConverter
+import com.example.cinemashift2025.detailes.data.network.DetailApi
+import com.example.cinemashift2025.detailes.data.repository.FilmRepositoryImpl
+import com.example.cinemashift2025.detailes.domain.usecase.GetFilmUseCase
 import com.example.cinemashift2025.poster.data.converter.FilmPosterConverter
 import com.example.cinemashift2025.poster.data.network.FilmPosterApi
 import com.example.cinemashift2025.poster.data.repository.FilmPosterRepositoryImpl
@@ -27,6 +31,10 @@ class MainActivity : ComponentActivity() {
     private val filmPosterRepository: FilmPosterRepository = FilmPosterRepositoryImpl(filmPosterApi, filmPosterConverter)
     private val getFilmPosterUseCase = GetFilmPosterUseCase(filmPosterRepository)
 
+    private val detailApi=networkModule.retrofit.create(DetailApi::class.java)
+    private val detailConverter=DetailConverter()
+    private val filmRepository=FilmRepositoryImpl(detailApi,detailConverter)
+    private val getFilmUseCase=GetFilmUseCase(filmRepository)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +43,7 @@ class MainActivity : ComponentActivity() {
             CinemaShift2025Theme {
                 MainScreen(
                     getFilmPosterUseCase = getFilmPosterUseCase,
+                    getFilmUseCase= getFilmUseCase
 
                 )
             }
