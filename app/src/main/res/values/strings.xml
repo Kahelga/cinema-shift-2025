@@ -7,5 +7,9 @@
     <string name="button_details">Подробнее</string>
     <string name="rating_platform">Кинопоиск %s</string>
     <string name="runtime_film"> %1$d мин</string>
-
+    <string name="details_title">О фильме</string>
+    <string name="details_description">Описание:</string>
+    <string name="details_actors">В главных ролях:</string>
+    <string name="details_description_more">Показать больше</string>
+    <string name="details_description_less">Скрыть</string>
 </resources>
