@@ -12,4 +12,5 @@
     <string name="details_actors">В главных ролях:</string>
     <string name="details_description_more">Показать больше</string>
     <string name="details_description_less">Скрыть</string>
+    <string name="details_schedule">Расписание</string>
 </resources>

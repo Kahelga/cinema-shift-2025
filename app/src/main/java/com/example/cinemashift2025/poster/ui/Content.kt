@@ -74,142 +74,151 @@ private fun FilmItem(
         shape = RoundedCornerShape(5.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        val genres = item.genres.joinToString(", ")
-        val year = getYearFromReleaseDate(item.releaseDate)
-        val baseUrl = "https://shift-intensive.ru/api"
-        val imagePath = item.img
-        val fullUrl = "$baseUrl$imagePath"
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-               // .background(Color.White)
-        ) {
-            Box(
-                modifier = Modifier
-                    .height(600.dp)
-                    .fillMaxWidth()
-                  //  .background(Color.White)
-                    .padding(top = 8.dp, start = 5.dp, end = 5.dp)
-            ) {
-                // загрузка изображения
-                val painter = rememberAsyncImagePainter(
-                    ImageRequest.Builder(LocalContext.current).data(data = fullUrl)
-                        .apply(block = fun ImageRequest.Builder.() {
-                            crossfade(true)
-                        }).build()
-                )
-
-                // Отображаем загруженное изображение
-                Image(
-                    painter = painter,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(RoundedCornerShape(5.dp)),
-                    contentScale = ContentScale.Crop
-                )
-
-                // отображение жанров, страны и года
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(2.dp)
-                        .background(Color.LightGray, shape = RoundedCornerShape(5.dp))
-                        .padding(2.dp)
-                ) {
-
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append(genres)
-                            }
-                            append("\n")
-                            append("${item.country.name}, $year")
-                        },
-                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.Black)
-                    )
-                }
-            }
-
-            // заголовок фильма
-            Text(
-                text =  buildAnnotatedString {
-                    append(item.name) // Имя фильма
-                    append(" (${item.ageRating})") // Возраст в скобках
-                },
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                modifier = Modifier.padding(top = 6.dp, start = 8.dp, end = 8.dp)
-            )
-            // отображение времени
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(top = 4.dp, start = 8.dp, end = 8.dp) // Отступы
-            ) {
-
-                Icon(
-                    imageVector = Icons.Default.PlayArrow,
-                    contentDescription = "Рейтинг контуром",
-                    tint = Color.Black,
-                    modifier = Modifier.size(30.dp)
-                )
-
-                Text(
-                    text = stringResource(R.string.runtime_film, item.runtime),
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(start = 4.dp)
-                )
-            }
-
-
-            // отображение рейтинга
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(top = 4.dp, start = 8.dp, end = 8.dp)
-            ) {
-                Box(
-                    modifier = Modifier.size(30.dp)
-                ) {
-                    // контур иконки
-                    Icon(
-                        imageVector = Icons.Default.Star,
-                        contentDescription = null,
-                        tint = Color.Black,
-                        modifier = Modifier.size(30.dp)
-                    )
-
-                    Icon(
-                        imageVector = Icons.Default.Star,
-                        contentDescription = null,
-                        tint = Color.Yellow,
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-                Text(
-                    text = stringResource(R.string.rating_platform, item.userRatings.kinopoisk),
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(start = 4.dp)
-                )
-            }
-
-            // кнопка для открытия деталей фильма
-            Button(
-                onClick = onItemClicked,
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(80.dp)
-                    .padding(top = 20.dp, bottom = 8.dp, start = 10.dp, end = 10.dp)
-                    .align(Alignment.CenterHorizontally)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.button_details),
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                )
-            }
+        Column(modifier = Modifier.fillMaxWidth()) {
+            FilmImage(item)
+            FilmTitle(item)
+            FilmRuntime(item)
+            FilmRating(item)
+            FilmButton(onItemClicked)
         }
     }
 }
+
+@Composable
+fun FilmImage(item: Film) {
+    val baseUrl = "https://shift-intensive.ru/api"
+    val imagePath = item.img
+    val fullUrl = "$baseUrl$imagePath"
+
+    Box(
+        modifier = Modifier
+            .height(600.dp)
+            .fillMaxWidth()
+            .padding(top = 8.dp, start = 5.dp, end = 5.dp)
+    ) {
+        // загрузка изображения
+        val context = LocalContext.current
+        val imageRequest = ImageRequest.Builder(context)
+            .data(fullUrl)
+            .crossfade(true)
+            .build()
+        val painter = rememberAsyncImagePainter(imageRequest)
+
+        Image(
+            painter = painter,
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(5.dp)),
+            contentScale = ContentScale.Crop
+        )
+
+        // отображение жанров, страны и года
+        val genres = item.genres.joinToString(", ")
+        val year = getYearFromReleaseDate(item.releaseDate)
+
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(2.dp)
+                .background(Color.LightGray, shape = RoundedCornerShape(5.dp))
+                .padding(2.dp)
+        ) {
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                        append(genres)
+                    }
+                    append("\n")
+                    append("${item.country.name}, $year")
+                },
+                style = MaterialTheme.typography.bodyMedium.copy(color = Color.Black)
+            )
+        }
+    }
+}
+
+@Composable
+fun FilmTitle(item: Film) {
+    Text(
+        text = buildAnnotatedString {
+            append(item.name)
+            append(" (${item.ageRating})")
+        },
+        style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
+        modifier = Modifier.padding(top = 6.dp, start = 8.dp, end = 8.dp)
+    )
+}
+
+@Composable
+fun FilmRuntime(item: Film) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(top = 4.dp, start = 8.dp, end = 8.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.PlayArrow,
+            contentDescription = null,
+            tint = Color.Black,
+            modifier = Modifier.size(30.dp)
+        )
+        Text(
+            text = stringResource(R.string.runtime_film, item.runtime),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(start = 4.dp)
+        )
+    }
+}
+
+@Composable
+fun FilmRating(item: Film) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(top = 4.dp, start = 8.dp, end = 8.dp)
+    ) {
+        Box(
+            modifier = Modifier.size(30.dp)
+        ) {
+            // контур иконки
+            Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = null,
+                tint = Color.Black,
+                modifier = Modifier.size(30.dp)
+            )
+
+            Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = null,
+                tint = Color.Yellow,
+                modifier = Modifier.size(28.dp)
+            )
+        }
+        Text(
+            text = stringResource(R.string.rating_platform, item.userRatings.kinopoisk),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(start = 4.dp)
+        )
+    }
+}
+
+@Composable
+private fun FilmButton(onItemClicked: () -> Unit) {
+    Button(
+        onClick = onItemClicked,
+        shape = RoundedCornerShape(10.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .padding(top = 20.dp, bottom = 8.dp, start = 10.dp, end = 10.dp)
+    ) {
+        Text(
+            text = stringResource(id = R.string.button_details),
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+        )
+    }
+}
+
 
 private fun getYearFromReleaseDate(releaseDate: String): String {
     return releaseDate.split(" ").last()

@@ -20,6 +20,10 @@ import com.example.cinemashift2025.poster.data.network.FilmPosterApi
 import com.example.cinemashift2025.poster.data.repository.FilmPosterRepositoryImpl
 import com.example.cinemashift2025.poster.domain.repository.FilmPosterRepository
 import com.example.cinemashift2025.poster.domain.usecase.GetFilmPosterUseCase
+import com.example.cinemashift2025.schedule.data.converter.ScheduleConverter
+import com.example.cinemashift2025.schedule.data.network.ScheduleApi
+import com.example.cinemashift2025.schedule.data.repository.ScheduleRepositoryImpl
+import com.example.cinemashift2025.schedule.domain.usecase.GetScheduleUseCase
 import com.example.cinemashift2025.ui.theme.CinemaShift2025Theme
 
 class MainActivity : ComponentActivity() {
@@ -36,6 +40,10 @@ class MainActivity : ComponentActivity() {
     private val filmRepository=FilmRepositoryImpl(detailApi,detailConverter)
     private val getFilmUseCase=GetFilmUseCase(filmRepository)
 
+    private val scheduleApi=networkModule.retrofit.create(ScheduleApi::class.java)
+    private val scheduleConverter= ScheduleConverter()
+    private val scheduleRepository= ScheduleRepositoryImpl(scheduleApi,scheduleConverter)
+    private val getScheduleUseCase= GetScheduleUseCase(scheduleRepository)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +51,8 @@ class MainActivity : ComponentActivity() {
             CinemaShift2025Theme {
                 MainScreen(
                     getFilmPosterUseCase = getFilmPosterUseCase,
-                    getFilmUseCase= getFilmUseCase
+                    getFilmUseCase= getFilmUseCase,
+                    getScheduleUseCase=getScheduleUseCase
 
                 )
             }

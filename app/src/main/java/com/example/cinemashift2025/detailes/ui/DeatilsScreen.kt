@@ -49,6 +49,7 @@ fun DetailsScreen(
 
             is DetailsState.Content -> Content(
                 film = state.film,
+                scheduleResponse = state.scheduleResponse
             )
         }
     }

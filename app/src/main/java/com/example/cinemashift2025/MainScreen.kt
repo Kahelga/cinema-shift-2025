@@ -17,11 +17,13 @@ import com.example.cinemashift2025.poster.domain.usecase.GetFilmPosterUseCase
 import com.example.cinemashift2025.poster.presentation.PosterViewModel
 import com.example.cinemashift2025.poster.presentation.PosterViewModelFactory
 import com.example.cinemashift2025.poster.ui.PosterScreen
+import com.example.cinemashift2025.schedule.domain.usecase.GetScheduleUseCase
 
 @Composable
 fun MainScreen(
     getFilmPosterUseCase: GetFilmPosterUseCase,
-    getFilmUseCase: GetFilmUseCase
+    getFilmUseCase: GetFilmUseCase,
+    getScheduleUseCase: GetScheduleUseCase
 
 ) {
     val navController = rememberNavController()
@@ -36,7 +38,7 @@ fun MainScreen(
             }
             composable<DetailsRoute> {
                 val destination = it.toRoute<DetailsRoute>()
-                val viewModel = viewModel(DetailsViewModel::class.java, factory = DetailsViewModelFactory(destination.filmId, getFilmUseCase))
+                val viewModel = viewModel(DetailsViewModel::class.java, factory = DetailsViewModelFactory(destination.filmId, getFilmUseCase,getScheduleUseCase))
                 DetailsScreen(
                     viewModel
                 )

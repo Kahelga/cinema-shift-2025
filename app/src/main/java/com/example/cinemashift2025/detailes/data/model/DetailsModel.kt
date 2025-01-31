@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DetailsModel(
     val success: Boolean,
-    // val reason: String,
+    val reason: String?=null,
     val film: FilmModel
 )

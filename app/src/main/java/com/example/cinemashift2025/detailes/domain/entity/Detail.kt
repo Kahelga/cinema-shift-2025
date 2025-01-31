@@ -4,6 +4,6 @@ import com.example.cinemashift2025.poster.domain.entity.Film
 
 data class Detail(
     val success: Boolean,
-    // val reason: String,
+    val reason: String?=null,
     val film: Film
 )

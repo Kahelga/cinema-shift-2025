@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class FilmResponseModel(
     val success: Boolean,
-   // val reason: String,
+    val reason: String?=null,
     val films: List<FilmModel>
 )
